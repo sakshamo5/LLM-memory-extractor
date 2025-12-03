@@ -7,7 +7,7 @@ from datetime import datetime
 
 st.set_page_config(
     page_title="Companion AI - Memory & Personality",
-    page_icon="🧠",
+    page_icon="",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -54,7 +54,7 @@ def initialize_session_state():
 initialize_session_state()
 
 with st.sidebar:
-    st.title("🧠 Companion AI Settings")
+    st.title("Companion AI Settings")
     
     st.subheader("Model Configuration")
     selected_model_name = st.selectbox(
@@ -99,11 +99,11 @@ with st.sidebar:
     st.metric("Messages", f"{st.session_state.message_count}/10")
     
     if st.session_state.message_count >= 10 and not st.session_state.memory_extracted:
-        st.warning("⚠️ Ready to extract memory!")
+        st.warning("Ready to extract memory!")
     
     st.divider()
     
-    if st.button("🗑️ Clear Chat", use_container_width=True):
+    if st.button("Clear Chat", use_container_width=True):
         st.session_state.chat_history = []
         st.session_state.message_count = 0
         st.session_state.extracted_memory = None
@@ -111,7 +111,7 @@ with st.sidebar:
         st.rerun()
     
     if st.session_state.message_count >= 10:
-        if st.button("🧠 Extract Memory", use_container_width=True, type="primary"):
+        if st.button("Extract Memory", use_container_width=True, type="primary"):
             with st.spinner("Analyzing conversation..."):
                 memory_data = st.session_state.memory_extractor.extract_memory(
                     st.session_state.chat_history
@@ -121,9 +121,9 @@ with st.sidebar:
                 st.success("Memory extracted!")
                 st.rerun()
 
-st.markdown('<div class="main-header">🤖 Companion AI System</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-header"> Companion AI System</div>', unsafe_allow_html=True)
 
-tab1, tab2, tab3 = st.tabs(["💬 Chat", "🧠 Memory Extraction", "🎭 Personality Demo"])
+tab1, tab2, tab3 = st.tabs(["Chat", "Memory Extraction", "Personality Demo"])
 
 with tab1:
     st.subheader(f"Chat Interface - Current Personality: {st.session_state.current_personality}")
@@ -134,7 +134,7 @@ with tab1:
             with st.chat_message(message["role"]):
                 st.write(message["content"])
                 if message["role"] == "assistant" and "personality" in message:
-                    st.caption(f"🎭 Personality: {message['personality']}")
+                    st.caption(f" Personality: {message['personality']}")
     
     if prompt := st.chat_input("Type your message here..."):
         st.session_state.chat_history.append({
@@ -169,7 +169,7 @@ with tab2:
         col1, col2, col3 = st.columns(3)
         
         with col1:
-            st.subheader("👤 User Preferences")
+            st.subheader("User Preferences")
             if memory.get("user_preferences"):
                 for pref in memory["user_preferences"]:
                     st.markdown(f"- {pref}")
@@ -177,7 +177,7 @@ with tab2:
                 st.info("No preferences detected yet")
         
         with col2:
-            st.subheader("😊 Emotional Patterns")
+            st.subheader("Emotional Patterns")
             if memory.get("emotional_patterns"):
                 for pattern in memory["emotional_patterns"]:
                     st.markdown(f"- {pattern}")
@@ -185,7 +185,7 @@ with tab2:
                 st.info("No patterns detected yet")
         
         with col3:
-            st.subheader("📌 Key Facts")
+            st.subheader("Key Facts")
             if memory.get("facts_to_remember"):
                 for fact in memory["facts_to_remember"]:
                     st.markdown(f"- {fact}")
@@ -194,18 +194,18 @@ with tab2:
         
         st.divider()
         
-        st.subheader("📄 Complete JSON Output")
+        st.subheader(" Complete JSON Output")
         json_str = json.dumps(memory, indent=2)
         st.code(json_str, language="json")
         
         st.download_button(
-            label="📥 Download Memory JSON",
+            label="Download Memory JSON",
             data=json_str,
             file_name=f"memory_extraction_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
             mime="application/json"
         )
     else:
-        st.info("💡 Chat for at least 10 messages, then click 'Extract Memory' in the sidebar to analyze the conversation.")
+        st.info(" Chat for at least 10 messages, then click 'Extract Memory' in the sidebar to analyze the conversation.")
         
         if st.session_state.message_count > 0:
             st.progress(st.session_state.message_count / 10)
@@ -233,7 +233,7 @@ with tab3:
         
         with st.spinner("Generating responses..."):
             for personality in demo_personalities:
-                with st.expander(f"🎭 {personality}", expanded=True):
+                with st.expander(f"{personality}", expanded=True):
                     response = st.session_state.personality_engine.generate_response(
                         demo_message,
                         [],
@@ -245,3 +245,4 @@ with tab3:
 st.sidebar.divider()
 st.sidebar.caption(f"Model: {st.session_state.current_model}")
 st.sidebar.caption(f"Personality: {st.session_state.current_personality}")
+
